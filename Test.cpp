@@ -3,6 +3,10 @@
 
 int main()
 {
-    std::cout << get_log_path();
+    auto dates = get_dates(7);
+    for (auto i : dates)
+    {
+        std::cout << i << "\n";
+    }
     return 0;
 }

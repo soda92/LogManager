@@ -10,7 +10,7 @@ int main()
     file.open("path.ini", std::ios::in);
     std::string line;
     std::getline(file, line);
-
+fs::create_directory("sandbox
 
     std::string path = "/path/to/directory";
     for (const auto &entry : fs::directory_iterator(path))
