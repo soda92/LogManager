@@ -8,8 +8,21 @@
 #include <iostream>
 #include <sstream>
 #include <iomanip>
+#include <filesystem>
+
+#include <boost/date_time/gregorian/gregorian.hpp>
+
 typedef std::chrono::system_clock Clock;
 using namespace std::chrono_literals;
+namespace fs = std::filesystem;
+
+int to_int(std::string str)
+{
+    std::stringstream ss(str);
+    int value = 0;
+    ss >> value;
+    return value;
+}
 
 std::string get_log_path()
 {
@@ -70,6 +83,23 @@ std::vector<std::string> get_dates(int days)
 std::vector<int> convert_dates_to_days(std::vector<std::string> dates)
 {
     std::vector<int> ret;
+    int year = get_date(Clock::now())[0];
+    for (auto date : dates)
+    {
+        auto month = to_int(date.substr(0, 2));
+        auto day = to_int(date.substr(2, std::string::npos));
+        try
+        {
+            boost::gregorian::date d(year, month, day);
+            int dayNumber = d.day_of_year();
+            ret.push_back(dayNumber);
+        }
+        catch (std::out_of_range &e)
+        {
+            // Alternatively catch bad_year etc exceptions.
+            std::cout << "Bad date: " << e.what() << std::endl;
+        }
+    }
     return ret;
 }
 
