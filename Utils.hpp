@@ -73,10 +73,8 @@ std::vector<std::string> get_dates(int days)
     {
         date -= 24h;
         std::vector<int> vecDate = get_date(date);
-        std::string folderName;
-        std::stringstream out;
-        out << std::setfill('0') << std::setw(2) << vecDate[1] << vecDate[2];
-        ret.push_back(out.str());
+        std::string strDate = fmt::format("{:02}{:02}", vecDate[1], vecDate[2]);
+        ret.push_back(strDate);
     }
     return ret;
 }

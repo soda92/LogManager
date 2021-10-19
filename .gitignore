@@ -36,3 +36,4 @@
 /Logs
 .vscode
 /build
+*.log
