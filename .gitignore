@@ -35,3 +35,4 @@
 !path.example.ini
 /Logs
 .vscode
+/build
