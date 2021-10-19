@@ -9,6 +9,7 @@
 #include <sstream>
 #include <iomanip>
 #include <filesystem>
+#include <fmt/core.h>
 
 #include <boost/date_time/gregorian/gregorian.hpp>
 
@@ -101,6 +102,20 @@ std::vector<int> convert_dates_to_days(std::vector<std::string> dates)
         }
     }
     return ret;
+}
+
+std::vector<std::string> get_dir_names(int days_)
+{
+    auto dates = get_dates(days_);
+    auto days = convert_dates_to_days(dates);
+    std::vector<std::string> filenames;
+    for (std::size_t i = 0; i < days.size(); i++)
+    {
+        std::string strDays = fmt::format("{:03}", days[i]);
+        std::string filename = fmt::format("{}({})", strDays, dates[i]);
+        filenames.push_back(filename);
+    }
+    return filenames;
 }
 
 #endif

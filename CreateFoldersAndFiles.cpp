@@ -1,4 +1,5 @@
 #include "Utils.hpp"
+#include <boost/filesystem.hpp>
 
 int main(int argc, char **argv)
 {
@@ -16,5 +17,15 @@ int main(int argc, char **argv)
         input = to_int(argv[1]);
     }
 
-    fs::create_directory("Logs");
+    auto current = boost::filesystem::current_path();
+    current /= "/Logs/";
+    boost::filesystem::create_directory(current);
+    auto dirnames = get_dir_names(10);
+    for (auto dirname : dirnames)
+    {
+        auto p = current;
+        p += dirname;
+        std::cout << p << '\n';
+    }
+    return 0;
 }
