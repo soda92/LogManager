@@ -24,7 +24,17 @@ int main(int argc, char **argv)
     for (auto dirname : dirnames)
     {
         auto p = current;
-        p += dirname;
+        p /= dirname + "/";
+        boost::filesystem::create_directory(p);
+        auto p2 = p;
+        p2 += "log.txt";
+        std::ofstream file;
+        file.open(p2.c_str(), std::ios::out);
+        p /= "log/";
+        boost::filesystem::create_directory(p);
+        p /= "loglog.txt";
+        file.close();
+        file.open(p.c_str(), std::ios::out);
         std::cout << p << '\n';
     }
     return 0;
