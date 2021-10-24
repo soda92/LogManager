@@ -15,7 +15,7 @@ using std::endl;
 
 int calc_day_difference(std::string folder_name)
 {
-    auto curr_date = get_date(Clock::now());
+    auto curr_date = get_date(0);
     int year = curr_date[0], month = curr_date[1], day = curr_date[2];
 
     std::string month2 = folder_name.substr(4, 2),

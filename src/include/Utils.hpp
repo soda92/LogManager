@@ -1,78 +1,48 @@
 #ifndef UTILS_H
 #define UTILS_H
 #include <string>
-#include <fstream>
 #include <vector>
-#include <chrono>
-#include <ctime>
 #include <iostream>
-#include <sstream>
-#include <iomanip>
-#include <filesystem>
+#include <regex>
+
 #include <fmt/core.h>
-
 #include <boost/date_time/gregorian/gregorian.hpp>
-
-typedef std::chrono::system_clock Clock;
-using namespace std::chrono_literals;
-namespace fs = std::filesystem;
+#include <INIReader.h>
 
 int to_int(std::string str)
 {
-    std::stringstream ss(str);
-    int value = 0;
-    ss >> value;
+    int value = boost::lexical_cast<int>(str);
     return value;
 }
 
 std::string get_log_path()
 {
-    std::ifstream file;
-    file.open("path.ini", std::ios::in);
-    std::string line;
-    std::getline(file, line);
-    auto equal_pos = line.find('=');
-    auto path = line.substr(equal_pos, std::string::npos);
-    std::string path2 = "";
-    for (auto c : path)
-    {
-        if (c == ' ' || c == '=')
-        {
-            continue;
-        }
-        if (c == '\\')
-        {
-            path2 += "\\\\";
-        }
-        else
-        {
-            path2 += c;
-        }
-    }
-    return path2;
+    INIReader reader("config/path.ini");
+    std::string dir = reader.Get("path", "dir", "");
+    std::string path = std::regex_replace(dir, std::regex("\\"), "/");
+    return path;
 }
 
-std::vector<int> get_date(Clock::time_point time)
+std::vector<int> get_date(int offset)
 {
-    std::time_t now_c = Clock::to_time_t(time);
-    struct tm *parts = std::localtime(&now_c);
+    using namespace boost::gregorian;
+    date today(day_clock::local_day());
+    date_duration dd(offset);
+    date d = today - dd;
 
     std::vector<int> ret;
-    ret.push_back(1900 + parts->tm_year);
-    ret.push_back(1 + parts->tm_mon);
-    ret.push_back(parts->tm_mday);
+    ret.push_back(d.year());
+    ret.push_back(d.month().as_number());
+    ret.push_back(d.day().as_number());
     return ret;
 }
 
 std::vector<std::string> get_dates(int days)
 {
     std::vector<std::string> ret;
-    auto now = Clock::now();
-    auto date = now;
     for (int i = 0; i < days; i++)
     {
-        date -= 24h;
-        std::vector<int> vecDate = get_date(date);
+        std::vector<int> vecDate = get_date(i);
         std::string strDate = fmt::format("{:02}{:02}", vecDate[1], vecDate[2]);
         ret.push_back(strDate);
     }
@@ -82,7 +52,7 @@ std::vector<std::string> get_dates(int days)
 std::vector<int> convert_dates_to_days(std::vector<std::string> dates)
 {
     std::vector<int> ret;
-    int year = get_date(Clock::now())[0];
+    int year = get_date(0)[0];
     for (auto date : dates)
     {
         auto month = to_int(date.substr(0, 2));
