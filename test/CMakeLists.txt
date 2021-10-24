@@ -1,4 +1,3 @@
-
 add_executable(test_directories.out test_directories.cpp)
 target_link_libraries(test_directories.out Boost::date_time 
 Boost::filesystem fmt::fmt)
