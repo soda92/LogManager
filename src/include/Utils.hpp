@@ -1,13 +1,14 @@
-#ifndef UTILS_H
+﻿#ifndef UTILS_H
 #define UTILS_H
 #include <string>
 #include <vector>
 #include <iostream>
+#include <fstream>
 #include <regex>
 
 #include <fmt/core.h>
 #include <boost/date_time/gregorian/gregorian.hpp>
-#include <INIReader.h>
+#include <boost/filesystem.hpp>
 
 int to_int(std::string str)
 {
@@ -17,10 +18,17 @@ int to_int(std::string str)
 
 std::string get_log_path()
 {
-    INIReader reader("config/path.ini");
-    std::string dir = reader.Get("path", "dir", "");
-    std::string path = std::regex_replace(dir, std::regex("\\"), "/");
-    return path;
+    using namespace boost::filesystem;
+    path p = current_path();
+    p /= "config/";
+    p /= "path.ini";
+    std::fstream file(p.string());
+    std::string line;
+    std::getline(file, line);
+    std::getline(file, line);
+    file.close();
+    // 多减的1是 `\n`
+    return line.substr(6, line.size() - 6 - 1);
 }
 
 std::vector<int> get_date(int offset)

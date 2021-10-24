@@ -7,8 +7,8 @@ add_executable(test.out test.cc)
 target_link_libraries(test.out Boost::date_time 
 Boost::filesystem fmt::fmt)
 
-add_executable(Test.out Test.cpp)
-target_link_libraries(Test.out Boost::date_time 
+add_executable(Test2.out Test.cpp)
+target_link_libraries(Test2.out Boost::date_time 
 Boost::filesystem fmt::fmt)
 
 add_executable(CreateFoldersAndFiles.out CreateFoldersAndFiles.cpp)

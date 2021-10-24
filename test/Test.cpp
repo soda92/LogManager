@@ -1,5 +1,6 @@
 #include "Utils.hpp"
 #include <iostream>
+#include <fmt/core.h>
 
 int main()
 {
@@ -8,5 +9,6 @@ int main()
     {
         std::cout << i << "\n";
     }
+    fmt::print("{}\n", get_log_path());
     return 0;
 }
